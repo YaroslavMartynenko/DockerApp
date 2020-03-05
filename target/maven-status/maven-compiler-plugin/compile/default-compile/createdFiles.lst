@@ -1,2 +1,4 @@
-app\controller\MainController.class
+app\domain\Human.class
+app\repository\Repository.class
 app\Application.class
+app\controller\Controller.class
