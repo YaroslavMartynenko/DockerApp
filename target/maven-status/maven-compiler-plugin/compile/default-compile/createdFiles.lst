@@ -1,4 +1,6 @@
 app\domain\Human.class
 app\repository\Repository.class
+app\domain\Point.class
 app\Application.class
+app\domain\Attribute.class
 app\controller\Controller.class

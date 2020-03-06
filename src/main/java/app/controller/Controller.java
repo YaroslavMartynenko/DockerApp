@@ -18,10 +18,10 @@ public class Controller {
         this.repository = repository;
     }
 
-    @GetMapping("/{name}")
-    public String greeting(@PathVariable String name) {
-        return "Hi!!! " + name;
-    }
+//    @GetMapping("/{name}")
+//    public String greeting(@PathVariable String name) {
+//        return "Hi!!! " + name;
+//    }
 
     @GetMapping("/{id}")
     public Human getHuman(@PathVariable Long id) {

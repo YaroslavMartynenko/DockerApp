@@ -1,3 +1,5 @@
--- insert into usr ( age , name)
--- values ( 22 ,'Oleg');
--- insert into human (age, name) values (?, ?)
+-- insert into human ( age , name)
+-- values (1, 22 ,'Oleg');
+--
+-- insert into human ( age, name)
+-- values ( 23, 'Roma');

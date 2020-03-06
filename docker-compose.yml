@@ -1,27 +1,31 @@
-version: '3.1'
+version: '3.7'
 services:
-  db:
+  db1:
     image: postgres:12.2
-    #    container_name: db
-    network_mode: bridge
+    restart: always
+    networks:
+      spring-postgres-network:
+        aliases:
+          - db1
     ports:
       - 5432:5432
     environment:
+      - POSTGRES_DB=test1
       - POSTGRES_PASSWORD=root
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=test
   app:
-#    container_name: app-springboot-postgresql
-#    image: app-springboot-postgresql
-    image: springapp:latest
-#    environment: 'SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres'
-    network_mode: bridge
+    build: .
+    restart: always
     ports:
       - 8080:8080
     depends_on:
-      - db
-
-
+      - db1
+    networks:
+      spring-postgres-network:
+        aliases:
+          - app
+networks:
+  spring-postgres-network:
 
 
 
