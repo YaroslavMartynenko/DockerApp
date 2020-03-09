@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface Repository extends JpaRepository<Human, Long> {
     Human findHumanById(Long id);
-    List<Human> findAll ();
+
+    List<Human> findAll();
 }

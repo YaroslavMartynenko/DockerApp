@@ -1,17 +1,36 @@
 package app.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.*;
+import org.hibernate.annotations.JoinColumnOrFormula;
 
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Getter
 @Entity
+@Table(name = "point")
 public class Point {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, unique = true)
     private Long id;
-    private String name;
 
+    @Column(name = "coordinates")
+    private String coordinates;
+
+    @OneToOne(mappedBy = "point", cascade = CascadeType.PERSIST)// CascadeType ?
+    private PointAttributeValue pointAttributeValue;
+
+//    @ToString.Exclude
+//    @ManyToMany (fetch = FetchType.EAGER)
+//    @JoinTable(name = "point_attribute",
+//            joinColumns = @JoinColumn(name = "point_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "attribute_id", referencedColumnName = "id"))
+//    Set<Attribute> attributes;
 
 }

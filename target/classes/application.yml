@@ -17,3 +17,5 @@ spring:
     password: root
     baseline-on-migrate: true
     enabled: true
+server:
+  port: 8081
