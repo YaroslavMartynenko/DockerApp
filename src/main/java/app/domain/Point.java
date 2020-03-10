@@ -23,7 +23,7 @@ public class Point {
     @Column(name = "coordinates")
     private String coordinates;
 
-    @OneToOne(mappedBy = "point", cascade = CascadeType.PERSIST)// CascadeType ?
+    @OneToOne // CascadeType ?
     private PointAttributeValue pointAttributeValue;
 
 //    @ToString.Exclude

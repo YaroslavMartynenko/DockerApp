@@ -15,12 +15,12 @@ import javax.persistence.*;
 public class PointAttributeValue {
 
     @Id
-    @OneToOne
+    @OneToOne(mappedBy = "pointAttributeValue", cascade = CascadeType.ALL)
     @JoinColumn(name = "point_id", referencedColumnName = "id", nullable = false)
     private Point point;
 
     @Id
-    @OneToOne
+    @OneToOne(mappedBy = "pointAttributeValue", cascade = CascadeType.ALL)
     @JoinColumn(name = "attribute_id", referencedColumnName = "id", nullable = false)
     private Attribute attribute;
 
