@@ -1,21 +1,21 @@
-spring:
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://db:5432/locations
-    username: postgres
-    password: root
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      dialect: org.hibernate.dialect.PostgreSQLDialect
-    generate-ddl: true
-    show-sql: false
-  flyway:
-    url: jdbc:postgresql://db:5432/locations
-    user: postgres
-    password: root
-    baseline-on-migrate: true
-    enabled: true
-server:
-  port: 8080
+#spring:
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://db:5432/locations
+#    username: postgres
+#    password: root
+#  jpa:
+#    hibernate:
+#      ddl-auto: validate
+#    properties:
+#      dialect: org.hibernate.dialect.PostgreSQLDialect
+#    generate-ddl: true
+#    show-sql: false
+#  flyway:
+#    url: jdbc:postgresql://db:5432/locations
+#    user: postgres
+#    password: root
+#    baseline-on-migrate: true
+#    enabled: true
+#server:
+#  port: 8080
