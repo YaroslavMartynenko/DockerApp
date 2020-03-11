@@ -19,31 +19,31 @@ public class PointServiceImpl implements PointService {
         this.pointRepository = pointRepository;
     }
 
-    public Point getPointById(Long id) {
-        return pointRepository.getPointById(id);
-    }
-
-    public Point getPointByCoordinates(String coordinates) {
-        return pointRepository.getPointByCoordinates(coordinates);
-    }
-
-    public List<Point> getAllPoints() {
-        return pointRepository.getAll();
-    }
-
-    public void addNewPoint(Point point) {
-        pointRepository.save(point);
-    }
-
-    public void updatePoint(Point point) {
-        pointRepository.save(point);
-    }
-
-    public void deletePointById(Long id) {
-        pointRepository.deletePointById(id);
-    }
-
-    public void deletePointByCoordinates(String coordinates) {
-        pointRepository.deletePointByCoordinates(coordinates);
-    }
+//    public Point getPointById(Long id) {
+//        return pointRepository.getPointById(id);
+//    }
+//
+//    public Point getPointByCoordinates(String coordinates) {
+//        return pointRepository.getPointByCoordinates(coordinates);
+//    }
+//
+//    public List<Point> getAllPoints() {
+//        return pointRepository.getAll();
+//    }
+//
+//    public void addNewPoint(Point point) {
+//        pointRepository.save(point);
+//    }
+//
+//    public void updatePoint(Point point) {
+//        pointRepository.save(point);
+//    }
+//
+//    public void deletePointById(Long id) {
+//        pointRepository.deletePointById(id);
+//    }
+//
+//    public void deletePointByCoordinates(String coordinates) {
+//        pointRepository.deletePointByCoordinates(coordinates);
+//    }
 }

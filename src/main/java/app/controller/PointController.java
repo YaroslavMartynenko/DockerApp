@@ -18,20 +18,20 @@ public class PointController {
         this.pointService = pointService;
     }
 
-    @GetMapping("/attributes")
-    public Set<Attribute> getPointAttributes(@RequestParam String coordinates) {
-        return pointService.getPointByCoordinates(coordinates).getAttributes();
-    }
-
-    @PostMapping("/add_point")
-    public void addNewPoint(@RequestBody Point point) {
-        pointService.addNewPoint(point);
-    }
-
-    @PostMapping("/add_attribute")
-    public void addPointAttribute(@RequestParam String coordinates, @RequestBody Attribute attribute) {
-        Point point = pointService.getPointByCoordinates(coordinates);
-        point.getAttributes().add(attribute);
-        pointService.updatePoint(point);
-    }
+//    @GetMapping("/attributes")
+//    public Set<Attribute> getPointAttributes(@RequestParam String coordinates) {
+//        return pointService.getPointByCoordinates(coordinates).getAttributes();
+//    }
+//
+//    @PostMapping("/add_point")
+//    public void addNewPoint(@RequestBody Point point) {
+//        pointService.addNewPoint(point);
+//    }
+//
+//    @PostMapping("/add_attribute")
+//    public void addPointAttribute(@RequestParam String coordinates, @RequestBody Attribute attribute) {
+//        Point point = pointService.getPointByCoordinates(coordinates);
+//        point.getAttributes().add(attribute);
+//        pointService.updatePoint(point);
+//    }
 }

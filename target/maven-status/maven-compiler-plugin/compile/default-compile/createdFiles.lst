@@ -1,6 +1,11 @@
-app\domain\Human.class
-app\repository\Repository.class
+app\service\impl\PointServiceImpl.class
 app\domain\Point.class
-app\Application.class
+app\repository\PointRepository.class
+app\service\AttributeService.class
 app\domain\Attribute.class
-app\controller\Controller.class
+app\controller\PointController.class
+app\repository\AttributeRepository.class
+app\service\impl\AttributeServiceImpl.class
+app\service\PointService.class
+app\domain\Value.class
+app\Application.class

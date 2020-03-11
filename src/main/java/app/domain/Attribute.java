@@ -5,13 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
 @Table(name = "attribute")
-public class Attribute {
+public class Attribute implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +22,7 @@ public class Attribute {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(mappedBy = "attribute")
-    private PointAttributeValue pointAttributeValue;
-
-//    @ToString.Exclude
-//    @ManyToMany (mappedBy = "attributes")
-//    private Set<Point> points;
+    @OneToMany(mappedBy = "attribute", cascade = CascadeType.ALL)
+    private List<Value> values;
 
 }

@@ -1,36 +1,36 @@
 package app.domain;
 
-import lombok.*;
-import org.hibernate.annotations.JoinColumnOrFormula;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Getter
 @Entity
 @Table(name = "point")
-public class Point {
+public class Point implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
-    @Column(name = "coordinates")
-    private String coordinates;
+    @Column(name = "name")
+    private String name;
 
-    @OneToOne // CascadeType ?
-    private PointAttributeValue pointAttributeValue;
+    @Column(name = "longtitude")
+    private BigDecimal longtitude;
 
-//    @ToString.Exclude
-//    @ManyToMany (fetch = FetchType.EAGER)
-//    @JoinTable(name = "point_attribute",
-//            joinColumns = @JoinColumn(name = "point_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "attribute_id", referencedColumnName = "id"))
-//    Set<Attribute> attributes;
+    @Column(name = "latitude")
+    private BigDecimal latitude;
+
+    @OneToMany(mappedBy = "point", cascade = CascadeType.ALL) //Cascade.ALL ?
+    private List<Value> values;
 
 }

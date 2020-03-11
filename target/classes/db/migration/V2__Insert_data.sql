@@ -1,5 +1,0 @@
--- insert into human ( age , name)
--- values (1, 22 ,'Oleg');
---
--- insert into human ( age, name)
--- values ( 23, 'Roma');
