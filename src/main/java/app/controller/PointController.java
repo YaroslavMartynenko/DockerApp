@@ -2,6 +2,7 @@ package app.controller;
 
 import app.domain.Attribute;
 import app.domain.Point;
+import app.domain.Value;
 import app.repository.ValueRepository;
 import app.service.AttributeService;
 import app.service.PointService;
@@ -55,19 +56,18 @@ public class PointController {
         attributeService.addNewAttribute(attribute);
     }
 
-//    @GetMapping("/test")
-//    public void test() {
-//
-//        Point point1 = new Point(1L, "test1", new BigDecimal(1.35), new BigDecimal(1.35), null);
-//        addNewPoint(point1);
-//        Attribute attribute1 = new Attribute(1L, "test1", null);
-//        addNewAttribute(attribute1);
-//
-//        Point pointById = pointService.getPointById(1L);
-//        Attribute attributeById = attributeService.getAttributeById(1L);
-//
-//        Value value = new Value(pointById, attributeById, "test");
-//        valueRepository.saveValue(value);
-//    }
+    @GetMapping("/test")
+    public void test() {
+        Point point1 = new Point(1L, "point1", new BigDecimal(1.35), new BigDecimal(1.35), null);
+        addNewPoint(point1);
+        Attribute attribute1 = new Attribute(1L, "attribute1", null);
+        addNewAttribute(attribute1);
+
+        Point pointById = pointService.getPointById(1L);
+        Attribute attributeById = attributeService.getAttributeById(1L);
+
+        Value value = new Value(null, pointById, attributeById, "value1");
+        valueRepository.save(value);
+    }
 
 }

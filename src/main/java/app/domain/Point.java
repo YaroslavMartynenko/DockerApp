@@ -1,11 +1,13 @@
 package app.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -14,7 +16,8 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "point")
-public class Point implements Serializable {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class Point {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +33,8 @@ public class Point implements Serializable {
     @Column(name = "latitude")
     private BigDecimal latitude;
 
-    @OneToMany(mappedBy = "point", cascade = CascadeType.ALL) //Cascade.ALL ?
+    @ToString.Exclude
+    @OneToMany(mappedBy = "point", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Value> values;
 
 }

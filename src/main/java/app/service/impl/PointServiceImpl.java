@@ -2,9 +2,8 @@ package app.service.impl;
 
 import app.domain.Attribute;
 import app.domain.Point;
-import app.domain.Value;
 import app.repository.PointRepository;
-import app.repository.impl.ValueRepositoryImpl;
+import app.repository.ValueRepository;
 import app.service.PointService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ import java.util.List;
 public class PointServiceImpl implements PointService {
 
     private final PointRepository pointRepository;
-    private final ValueRepositoryImpl valueRepository;
+    private final ValueRepository valueRepository;
 
     @Override
     public Point getPointById(Long id) {
@@ -57,8 +56,7 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public void addAttributeToPoint(Attribute attribute, Point point, String value) {
-        Value v = new Value(point, attribute, value);
-        valueRepository.saveValue(v);
+
     }
 
 }

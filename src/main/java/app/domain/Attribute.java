@@ -1,8 +1,8 @@
 package app.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,7 +13,8 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "attribute")
-public class Attribute implements Serializable {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class Attribute {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +23,8 @@ public class Attribute implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "attribute", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @OneToMany(mappedBy = "attribute", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Value> values;
 
 }
