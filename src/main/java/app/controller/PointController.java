@@ -62,12 +62,11 @@ public class PointController {
         addNewPoint(point1);
         Attribute attribute1 = new Attribute(1L, "attribute1", null);
         addNewAttribute(attribute1);
-
         Point pointById = pointService.getPointById(1L);
         Attribute attributeById = attributeService.getAttributeById(1L);
+        String value = "new Value";
 
-        Value value = new Value(null, pointById, attributeById, "value1");
-        valueRepository.save(value);
+        pointService.addAttributeToPoint(attributeById, pointById, value);
     }
 
 }
