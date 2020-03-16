@@ -8,8 +8,10 @@ import app.repository.PointRepository;
 import app.repository.ValueRepository;
 import app.service.PointService;
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.List;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Service
+@Transactional
 public class PointServiceImpl implements PointService {
 
     private final PointRepository pointRepository;
@@ -68,7 +71,9 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public List<Attribute> getPointAttributes(Long pointId) {
-        List<Value> values = pointRepository.findPointById(pointId).getValues();
+        Point point = pointRepository.findPointById(pointId);
+        Hibernate.initialize(point.getValues());
+        List<Value> values = point.getValues();
         List<Attribute> attributes = new ArrayList<>();
         for (Value v : values) {
             attributes.add(v.getAttribute());

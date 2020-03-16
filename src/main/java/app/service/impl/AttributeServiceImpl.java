@@ -6,14 +6,17 @@ import app.domain.Value;
 import app.repository.AttributeRepository;
 import app.service.AttributeService;
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Service
+@Transactional
 public class AttributeServiceImpl implements AttributeService {
 
     private final AttributeRepository attributeRepository;
@@ -55,7 +58,9 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public List<Point> getPointsWithAttribute(Long attributeId) {
-        List<Value> values = attributeRepository.findAttributeById(attributeId).getValues();
+        Attribute attribute = attributeRepository.findAttributeById(attributeId);
+        Hibernate.initialize(attribute.getValues());
+        List<Value> values = attribute.getValues();
         List<Point> points = new ArrayList<>();
         for (Value v : values) {
             points.add(v.getPoint());

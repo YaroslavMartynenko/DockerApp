@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Transactional
 public interface ValueRepository extends JpaRepository<Value, Long> {
     List<Value> findAll();
 }

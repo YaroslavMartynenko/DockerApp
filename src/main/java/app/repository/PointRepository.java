@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Transactional
 public interface PointRepository extends JpaRepository<Point, Long> {
     Point findPointById(Long id);
 

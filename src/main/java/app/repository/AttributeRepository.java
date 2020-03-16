@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Transactional
 public interface AttributeRepository extends JpaRepository<Attribute, Long> {
     Attribute findAttributeById(Long id);
 
