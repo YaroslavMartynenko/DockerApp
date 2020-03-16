@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @RestController
 @RequestMapping("point")
@@ -36,6 +37,16 @@ public class PointController {
     public void addNewPoint(@RequestBody Point point) {
         pointService.addNewPoint(point);
     }
+
+//    @PostMapping(value = "/add_point")
+//    public ResponseEntity<Point> addNewPoint(@RequestBody @Valid Point point) {
+//        if (point != null) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//        pointService.addNewPoint(point);
+//        return new ResponseEntity<>(point, HttpStatus.CREATED);
+//    }
+
 
     @PostMapping("/add_attribute_to_point")
     public void addAttributeToPoint(@RequestParam Long attributeId, @RequestParam Long pointId, @RequestParam String value) {

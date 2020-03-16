@@ -33,6 +33,7 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public Point getPointByCoordinates(BigDecimal longtitude, BigDecimal latitude) {
+
         return pointRepository.findPointByLongtitudeAndLatitude(longtitude, latitude);
     }
 
