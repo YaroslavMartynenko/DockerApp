@@ -1,6 +1,7 @@
 package app.service;
 
 import app.domain.Attribute;
+import app.domain.Point;
 
 import java.util.List;
 
@@ -18,5 +19,7 @@ public interface AttributeService {
     void deleteAttributeById(Long id);
 
     void deleteAttributeByName(String name);
+
+    List<Point> getPointsWithAttribute(Long attributeId);
 
 }

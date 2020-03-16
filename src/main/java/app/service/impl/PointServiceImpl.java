@@ -3,6 +3,7 @@ package app.service.impl;
 import app.domain.Attribute;
 import app.domain.Point;
 import app.domain.Value;
+import app.repository.AttributeRepository;
 import app.repository.PointRepository;
 import app.repository.ValueRepository;
 import app.service.PointService;
@@ -11,14 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Service
 public class PointServiceImpl implements PointService {
 
     private final PointRepository pointRepository;
+    private final AttributeRepository attributeRepository;
     private final ValueRepository valueRepository;
 
     @Override
@@ -57,26 +59,21 @@ public class PointServiceImpl implements PointService {
     }
 
     @Override
-    public void addAttributeToPoint(Attribute attribute, Point point, String value) {
-
-        if (Objects.isNull(point.getValues())) {
-            addNewValue(point, attribute, value);
-            return;
-        }
-
-        for (Value v : point.getValues()) {
-            if (Objects.equals(v.getAttribute().getId(), attribute.getId())) {
-                v.setValue(value);
-                valueRepository.save(v);
-                return;
-            }
-        }
-        addNewValue(point, attribute, value);
-    }
-
-    private void addNewValue(Point point, Attribute attribute, String value) {
+    public void addAttributeToPoint(Long attributeId, Long pointId, String value) {
+        Attribute attribute = attributeRepository.findAttributeById(attributeId);
+        Point point = pointRepository.findPointById(pointId);
         Value newValue = new Value(null, point, attribute, value);
         valueRepository.save(newValue);
+    }
+
+    @Override
+    public List<Attribute> getPointAttributes(Long pointId) {
+        List<Value> values = pointRepository.findPointById(pointId).getValues();
+        List<Attribute> attributes = new ArrayList<>();
+        for (Value v : values) {
+            attributes.add(v.getAttribute());
+        }
+        return attributes;
     }
 
 }

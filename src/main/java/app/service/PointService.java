@@ -21,6 +21,8 @@ public interface PointService {
 
     void deletePointByCoordinates(BigDecimal longtitude, BigDecimal latitude);
 
-    void addAttributeToPoint(Attribute attribute, Point point, String value);
+    void addAttributeToPoint(Long attributeId, Long pointId, String value);
+
+    public List<Attribute> getPointAttributes(Long pointId);
 
 }

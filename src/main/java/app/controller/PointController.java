@@ -2,29 +2,20 @@ package app.controller;
 
 import app.domain.Attribute;
 import app.domain.Point;
-import app.domain.Value;
-import app.repository.ValueRepository;
-import app.service.AttributeService;
 import app.service.PointService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 @RestController
 @RequestMapping("point")
 public class PointController {
-    private final PointService pointService;
-    private final AttributeService attributeService;
-    private final ValueRepository valueRepository;
 
-    @Autowired
-    public PointController(PointService pointService, AttributeService attributeService, ValueRepository valueRepository) {
-        this.pointService = pointService;
-        this.attributeService = attributeService;
-        this.valueRepository = valueRepository;
-    }
+    private final PointService pointService;
 
     @GetMapping("/show_points")
     public List<Point> getAllPoints() {
@@ -32,8 +23,13 @@ public class PointController {
     }
 
     @GetMapping("/show_point")
-    public Point getPointByCoordinates(BigDecimal longtitude, BigDecimal latitude) {
+    public Point getPointByCoordinates(@RequestParam BigDecimal longtitude, @RequestParam BigDecimal latitude) {
         return pointService.getPointByCoordinates(longtitude, latitude);
+    }
+
+    @GetMapping("/show_point_attributes/{id}")
+    public List<Attribute> getPointAttributes(@PathVariable Long id) {
+        return pointService.getPointAttributes(id);
     }
 
     @PostMapping("/add_point")
@@ -42,31 +38,13 @@ public class PointController {
     }
 
     @PostMapping("/add_attribute_to_point")
-    public void addAttributeToPoint(@RequestBody Attribute attribute, @RequestBody Point point, @RequestParam String value) {
-        pointService.addAttributeToPoint(attribute, point, value);
+    public void addAttributeToPoint(@RequestParam Long attributeId, @RequestParam Long pointId, @RequestParam String value) {
+        pointService.addAttributeToPoint(attributeId, pointId, value);
     }
 
-    @GetMapping("/show_attributes")
-    public List<Attribute> getAllAttributes() {
-        return attributeService.getAllAttributes();
-    }
-
-    @PostMapping("/add_attribute")
-    public void addNewAttribute(@RequestBody Attribute attribute) {
-        attributeService.addNewAttribute(attribute);
-    }
-
-    @GetMapping("/test")
-    public void test() {
-        Point point1 = new Point(1L, "point1", new BigDecimal(1.35), new BigDecimal(1.35), null);
-        addNewPoint(point1);
-        Attribute attribute1 = new Attribute(1L, "attribute1", null);
-        addNewAttribute(attribute1);
-        Point pointById = pointService.getPointById(1L);
-        Attribute attributeById = attributeService.getAttributeById(1L);
-        String value = "new Value";
-
-        pointService.addAttributeToPoint(attributeById, pointById, value);
+    @DeleteMapping("/delete_point/{id}")
+    public void deletePointById(@PathVariable Long id) {
+        pointService.deletePointById(id);
     }
 
 }
