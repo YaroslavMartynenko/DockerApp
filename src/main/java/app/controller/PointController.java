@@ -49,16 +49,17 @@ public class PointController {
     @GetMapping("/show_point_attributes/{id}")
     public ResponseEntity<List<Attribute>> getPointAttributes(@PathVariable @NotNull Long id) {
         Point point = pointService.getPointById(id);
-        if (Objects.isNull(point)) {
+        List<Attribute> attributes = pointService.getPointAttributes(id);
+        if (Objects.isNull(point) || attributes.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(pointService.getPointAttributes(id), HttpStatus.OK);
+        return new ResponseEntity<>(attributes, HttpStatus.OK);
     }
 
     @PostMapping(value = "/add_point")
-    public ResponseEntity<Point> addNewPoint(@RequestBody @Valid Point point) {
+    public ResponseEntity<HttpStatus> addNewPoint(@RequestBody @Valid Point point) {
         pointService.addNewPoint(point);
-        return new ResponseEntity<>(point, HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
