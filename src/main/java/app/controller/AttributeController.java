@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -27,7 +28,7 @@ public class AttributeController {
     }
 
     @PostMapping("/add_attribute")
-    public void addNewAttribute(@RequestBody Attribute attribute) {
+    public void addNewAttribute(@RequestBody @Valid Attribute attribute) {
         attributeService.addNewAttribute(attribute);
     }
 

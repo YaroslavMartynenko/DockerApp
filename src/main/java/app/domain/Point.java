@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -27,12 +30,17 @@ public class Point {
     @Column(name = "id")
     private Long id;
 
+    @NotBlank
     @Column(name = "name")
     private String name;
 
+    @NotNull
+    @PositiveOrZero
     @Column(name = "longtitude")
     private BigDecimal longtitude;
 
+    @NotNull
+    @PositiveOrZero
     @Column(name = "latitude")
     private BigDecimal latitude;
 
