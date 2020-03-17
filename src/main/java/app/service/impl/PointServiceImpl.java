@@ -3,6 +3,7 @@ package app.service.impl;
 import app.domain.Attribute;
 import app.domain.Point;
 import app.domain.Value;
+import app.exception.AttributePresentException;
 import app.repository.AttributeRepository;
 import app.repository.PointRepository;
 import app.repository.ValueRepository;
@@ -67,6 +68,14 @@ public class PointServiceImpl implements PointService {
         Attribute attribute = attributeRepository.findAttributeById(attributeId);
         Point point = pointRepository.findPointById(pointId);
         Value newValue = new Value(null, point, attribute, value);
+        Hibernate.initialize(point.getValues());
+        List<Value> values = point.getValues();
+        for (Value v : values) {
+            Hibernate.initialize(v.getAttribute());
+            if (v.getAttribute().getId().equals(attributeId)) {
+                throw new AttributePresentException();
+            }
+        }
         valueRepository.save(newValue);
     }
 

@@ -47,7 +47,7 @@ public class AttributeController {
     }
 
     @DeleteMapping("/delete_attribute/{id}")
-    public ResponseEntity<HttpStatus> deleteAttributeById(@PathVariable Long id) {
+    public ResponseEntity<HttpStatus> deleteAttributeById(@PathVariable @NotNull Long id) {
         Attribute attribute = attributeService.getAttributeById(id);
         if (Objects.isNull(attribute)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
