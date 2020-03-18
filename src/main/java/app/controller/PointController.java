@@ -3,7 +3,8 @@ package app.controller;
 import app.domain.Attribute;
 import app.domain.Point;
 import app.exception.AttributePresentException;
-import app.service.AttributeService;
+import app.exception.EmptyListException;
+import app.exception.WrongIdException;
 import app.service.PointService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,7 +17,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
 
 @Log4j2
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -25,76 +25,77 @@ import java.util.Objects;
 public class PointController {
 
     private final PointService pointService;
-    private final AttributeService attributeService;
 
-    @GetMapping("/show_points")
-    public ResponseEntity<List<Point>> getAllPoints() {
-        List<Point> points = pointService.getAllPoints();
-        if (Objects.isNull(points) || points.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @GetMapping()
+    public ResponseEntity<Object> getAllPoints() {
+        try {
+            List<Point> points = pointService.getAllPoints();
+            return new ResponseEntity<>(points, HttpStatus.OK);
+        } catch (EmptyListException e) {
+            log.warn("Error while executing request", e.getCause());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(points, HttpStatus.OK);
     }
 
-    @GetMapping("/show_point/{id}")
-    public ResponseEntity<Point> getPointByCoordinates(@PathVariable @NotNull Long id) {
-        Point point = pointService.getPointById(id);
-        if (Objects.isNull(point)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getPointById(@PathVariable @NotNull Long id) {
+        try {
+            Point point = pointService.getPointById(id);
+            return new ResponseEntity<>(point, HttpStatus.OK);
+        } catch (WrongIdException e) {
+            log.warn("Error while executing request", e.getCause());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(point, HttpStatus.OK);
     }
 
 
     @GetMapping("/show_point_attributes/{id}")
-    public ResponseEntity<List<Attribute>> getPointAttributes(@PathVariable @NotNull Long id) {
-        Point point = pointService.getPointById(id);
-        List<Attribute> attributes = pointService.getPointAttributes(id);
-        if (Objects.isNull(point) || attributes.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> getPointAttributes(@PathVariable @NotNull Long id) {
+        try {
+            List<Attribute> attributes = pointService.getPointAttributes(id);
+            return new ResponseEntity<>(attributes, HttpStatus.OK);
+        } catch (WrongIdException | EmptyListException e) {
+            log.warn("Error while executing request", e.getCause());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(attributes, HttpStatus.OK);
+
     }
 
-    @PostMapping(value = "/add_point")
-    public ResponseEntity<HttpStatus> addNewPoint(@RequestBody @Valid Point point) {
+    @PostMapping()
+    public ResponseEntity<Object> addNewPoint(@RequestBody @Valid Point point) {
         pointService.addNewPoint(point);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
     @PostMapping("/add_attribute_to_point")
-    public ResponseEntity<String> addAttributeToPoint(@RequestParam @NotNull Long attributeId,
+    public ResponseEntity<Object> addAttributeToPoint(@RequestParam @NotNull Long attributeId,
                                                       @RequestParam @NotNull Long pointId,
                                                       @RequestParam @NotBlank String value) {
-        Attribute attribute = attributeService.getAttributeById(attributeId);
-        Point point = pointService.getPointById(pointId);
-        if (Objects.isNull(attribute) || Objects.isNull(point)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         try {
             pointService.addAttributeToPoint(attributeId, pointId, value);
-        } catch (AttributePresentException e) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (WrongIdException | EmptyListException | AttributePresentException e) {
             log.warn("Error while executing request", e.getCause());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping()
-    public ResponseEntity<HttpStatus> updatePoint(@RequestBody @Valid Point point) {
-        pointService.updatePoint(point); //updating existing entities, how to save connected fields?
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PutMapping()
+//    public ResponseEntity<HttpStatus> updatePoint(@RequestBody @Valid Point point) {
+//        pointService.updatePoint(point); //updating existing entities, how to save connected fields?
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
-    @DeleteMapping("/delete_point/{id}")
-    public ResponseEntity<HttpStatus> deletePointById(@PathVariable @NotNull Long id) {
-        Point point = pointService.getPointById(id);
-        if (Objects.isNull(point)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deletePointById(@PathVariable @NotNull Long id) {
+        try {
+            pointService.deletePointById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (WrongIdException e) {
+            log.warn("Error while executing request", e.getCause());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        pointService.deletePointById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

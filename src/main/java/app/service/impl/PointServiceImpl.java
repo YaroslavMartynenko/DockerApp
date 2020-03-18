@@ -4,19 +4,19 @@ import app.domain.Attribute;
 import app.domain.Point;
 import app.domain.Value;
 import app.exception.AttributePresentException;
+import app.exception.EmptyListException;
+import app.exception.WrongIdException;
 import app.repository.AttributeRepository;
 import app.repository.PointRepository;
 import app.repository.ValueRepository;
 import app.service.PointService;
 import lombok.AllArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Service
@@ -29,18 +29,20 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public Point getPointById(Long id) {
-        return pointRepository.findPointById(id);
-    }
-
-    @Override
-    public Point getPointByCoordinates(BigDecimal longtitude, BigDecimal latitude) {
-
-        return pointRepository.findPointByLongtitudeAndLatitude(longtitude, latitude);
+        Point point = pointRepository.findPointById(id);
+        if (Objects.isNull(point)) {
+            throw new WrongIdException();
+        }
+        return point;
     }
 
     @Override
     public List<Point> getAllPoints() {
-        return pointRepository.findAll();
+        List<Point> points = pointRepository.findAll();
+        if (points.isEmpty()) {
+            throw new EmptyListException();
+        }
+        return points;
     }
 
     @Override
@@ -49,44 +51,40 @@ public class PointServiceImpl implements PointService {
     }
 
     @Override
-    public void updatePoint(Point point) {
-        pointRepository.save(point);
-    }
-
-    @Override
     public void deletePointById(Long id) {
+        Point point = pointRepository.findPointById(id);
+        if (Objects.isNull(point)) {
+            throw new WrongIdException();
+        }
         pointRepository.deletePointById(id);
     }
 
     @Override
-    public void deletePointByCoordinates(BigDecimal longtitude, BigDecimal latitude) {
-        pointRepository.deletePointByLongtitudeAndLatitude(longtitude, latitude);
-    }
-
-    @Override
     public void addAttributeToPoint(Long attributeId, Long pointId, String value) {
-        Attribute attribute = attributeRepository.findAttributeById(attributeId);
-        Point point = pointRepository.findPointById(pointId);
-        Value newValue = new Value(null, point, attribute, value);
-        Hibernate.initialize(point.getValues());
-        List<Value> values = point.getValues();
-        for (Value v : values) {
-            Hibernate.initialize(v.getAttribute());
-            if (v.getAttribute().getId().equals(attributeId)) {
+        Point point = getPointById(pointId);
+        List<Attribute> attributes = attributeRepository.findByValues_Point(point);
+        if (Objects.isNull(attributes)) {
+            throw new EmptyListException();
+        }
+        for (Attribute attribute : attributes) {
+            if (attribute.getId().equals(attributeId)) {
                 throw new AttributePresentException();
             }
         }
+        Attribute attribute = attributeRepository.findAttributeById(attributeId);
+        if (Objects.isNull(attribute)) {
+            throw new WrongIdException();
+        }
+        Value newValue = new Value(null, point, attribute, value);
         valueRepository.save(newValue);
     }
 
     @Override
     public List<Attribute> getPointAttributes(Long pointId) {
-        Point point = pointRepository.findPointById(pointId);
-        Hibernate.initialize(point.getValues());
-        List<Value> values = point.getValues();
-        List<Attribute> attributes = new ArrayList<>();
-        for (Value v : values) {
-            attributes.add(v.getAttribute());
+        Point point = getPointById(pointId);
+        List<Attribute> attributes = attributeRepository.findByValues_Point(point);
+        if (Objects.isNull(attributes)) {
+            throw new EmptyListException();
         }
         return attributes;
     }

@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "attribute")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Attribute {
 

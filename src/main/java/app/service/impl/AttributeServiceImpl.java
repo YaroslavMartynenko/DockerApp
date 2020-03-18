@@ -3,6 +3,7 @@ package app.service.impl;
 import app.domain.Attribute;
 import app.domain.Point;
 import app.domain.Value;
+import app.exception.WrongIdException;
 import app.repository.AttributeRepository;
 import app.service.AttributeService;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @Service
@@ -23,7 +25,11 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public Attribute getAttributeById(Long id) {
-        return attributeRepository.findAttributeById(id);
+        Attribute attribute = attributeRepository.findAttributeById(id);
+        if (Objects.isNull(attribute)) {
+            throw new WrongIdException();
+        }
+        return attribute;
     }
 
     @Override
