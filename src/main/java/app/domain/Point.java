@@ -46,5 +46,4 @@ public class Point {
     @JsonIgnore
     @OneToMany(mappedBy = "point", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Value> values;
-
 }

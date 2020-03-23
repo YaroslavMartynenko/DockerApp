@@ -3,8 +3,9 @@ package app.service.impl;
 import app.domain.Attribute;
 import app.domain.Point;
 import app.domain.Value;
-import app.exception.AttributePresentException;
+import app.exception.AttributePresentsException;
 import app.exception.EmptyListException;
+import app.exception.PointExistsException;
 import app.exception.WrongIdException;
 import app.repository.AttributeRepository;
 import app.repository.PointRepository;
@@ -12,6 +13,7 @@ import app.repository.ValueRepository;
 import app.service.PointService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,11 @@ public class PointServiceImpl implements PointService {
 
     @Override
     public void addNewPoint(Point point) {
+        Point pointFromDb = pointRepository
+                .findPointByLongtitudeAndLatitude(point.getLongtitude(), point.getLatitude());
+        if (Objects.nonNull(pointFromDb)) {
+            throw new PointExistsException();
+        }
         pointRepository.save(point);
     }
 
@@ -63,12 +70,12 @@ public class PointServiceImpl implements PointService {
     public void addAttributeToPoint(Long attributeId, Long pointId, String value) {
         Point point = getPointById(pointId);
         List<Attribute> attributes = attributeRepository.findByValues_Point(point);
-        if (Objects.isNull(attributes)) {
+        if (attributes.isEmpty()) {
             throw new EmptyListException();
         }
         for (Attribute attribute : attributes) {
             if (attribute.getId().equals(attributeId)) {
-                throw new AttributePresentException();
+                throw new AttributePresentsException();
             }
         }
         Attribute attribute = attributeRepository.findAttributeById(attributeId);
@@ -80,14 +87,13 @@ public class PointServiceImpl implements PointService {
     }
 
     @Override
-    public List<Attribute> getPointAttributes(Long pointId) {
-        Point point = getPointById(pointId);
+    public List<Attribute> getPointAttributes(Long id) {
+        Point point = getPointById(id);
         List<Attribute> attributes = attributeRepository.findByValues_Point(point);
-        if (Objects.isNull(attributes)) {
+        if (attributes.isEmpty()) {
             throw new EmptyListException();
         }
         return attributes;
     }
-
 }
 

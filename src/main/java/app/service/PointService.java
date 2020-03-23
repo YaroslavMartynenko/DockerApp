@@ -17,5 +17,4 @@ public interface PointService {
     void addAttributeToPoint(Long attributeId, Long pointId, String value);
 
     List<Attribute> getPointAttributes(Long pointId);
-
 }

@@ -1,8 +1,8 @@
 package app.repository;
 
+import app.domain.Attribute;
 import app.domain.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,6 +16,5 @@ public interface PointRepository extends JpaRepository<Point, Long> {
 
     void deletePointById(Long id);
 
-    void deletePointByLongtitudeAndLatitude(BigDecimal longtitude, BigDecimal latitude);
-
+    List<Point> findByValues_Attribute (Attribute attribute);
 }

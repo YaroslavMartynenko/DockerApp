@@ -2,13 +2,16 @@ package app.controller;
 
 import app.domain.Attribute;
 import app.domain.Point;
-import app.exception.AttributePresentException;
+import app.exception.AttributePresentsException;
 import app.exception.EmptyListException;
+import app.exception.PointExistsException;
 import app.exception.WrongIdException;
 import app.service.PointService;
+import app.service.impl.PointServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -63,8 +66,13 @@ public class PointController {
 
     @PostMapping()
     public ResponseEntity<Object> addNewPoint(@RequestBody @Valid Point point) {
-        pointService.addNewPoint(point);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        try {
+            pointService.addNewPoint(point);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (PointExistsException e) {
+            log.warn("Error while executing request", e.getCause());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 
@@ -75,17 +83,11 @@ public class PointController {
         try {
             pointService.addAttributeToPoint(attributeId, pointId, value);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (WrongIdException | EmptyListException | AttributePresentException e) {
+        } catch (WrongIdException | EmptyListException | AttributePresentsException e) {
             log.warn("Error while executing request", e.getCause());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-//    @PutMapping()
-//    public ResponseEntity<HttpStatus> updatePoint(@RequestBody @Valid Point point) {
-//        pointService.updatePoint(point); //updating existing entities, how to save connected fields?
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletePointById(@PathVariable @NotNull Long id) {
