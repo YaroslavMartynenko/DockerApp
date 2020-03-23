@@ -37,7 +37,6 @@ class PointControllerTest {
     @Autowired
     private PointController pointController;
 
-
 //    @Test
 //    public void shouldReturnDefaultMessage() throws Exception {
 //        this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk())
