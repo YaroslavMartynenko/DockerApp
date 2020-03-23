@@ -45,7 +45,6 @@ class PointControllerTest {
 
     @Test
     void shouldReturnListOfPoints() {
-        // mockMvc.perform(get())
     }
 
     @Test
