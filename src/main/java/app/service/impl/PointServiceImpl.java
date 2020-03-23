@@ -70,12 +70,11 @@ public class PointServiceImpl implements PointService {
     public void addAttributeToPoint(Long attributeId, Long pointId, String value) {
         Point point = getPointById(pointId);
         List<Attribute> attributes = attributeRepository.findByValues_Point(point);
-        if (attributes.isEmpty()) {
-            throw new EmptyListException();
-        }
-        for (Attribute attribute : attributes) {
-            if (attribute.getId().equals(attributeId)) {
-                throw new AttributePresentsException();
+        if (!attributes.isEmpty()) {
+            for (Attribute attribute : attributes) {
+                if (attribute.getId().equals(attributeId)) {
+                    throw new AttributePresentsException();
+                }
             }
         }
         Attribute attribute = attributeRepository.findAttributeById(attributeId);

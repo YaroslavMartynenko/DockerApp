@@ -83,9 +83,9 @@ public class PointController {
         try {
             pointService.addAttributeToPoint(attributeId, pointId, value);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (WrongIdException | EmptyListException | AttributePresentsException e) {
+        } catch (WrongIdException | AttributePresentsException e) {
             log.warn("Error while executing request", e.getCause());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 

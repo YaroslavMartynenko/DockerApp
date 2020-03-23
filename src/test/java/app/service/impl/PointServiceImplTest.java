@@ -151,7 +151,19 @@ class PointServiceImplTest {
     }
 
     @Test
-    void shouldAddAttributeToPoint() {
+    void shouldAddAttributeToPointWhenListOfAttributesIsEmpty() {
+        doReturn(points.get(0)).when(pointRepository).findPointById(anyLong());
+        doReturn(Collections.emptyList()).when(attributeRepository).findByValues_Point(any(Point.class));
+        doReturn(attributes.get(0)).when(attributeRepository).findAttributeById(anyLong());
+        pointService.addAttributeToPoint(1L, 1L, "Some value");
+        verify(pointRepository, times(1)).findPointById(anyLong());
+        verify(attributeRepository, times(1)).findByValues_Point(any(Point.class));
+        verify(attributeRepository, times(1)).findAttributeById(anyLong());
+        verify(valueRepository, times(1)).save(any(Value.class));
+    }
+
+    @Test
+    void shouldAddAttributeToPointWhenListOfAttributesIsNotEmpty() {
         doReturn(points.get(0)).when(pointRepository).findPointById(anyLong());
         doReturn(attributes).when(attributeRepository).findByValues_Point(any(Point.class));
         doReturn(attributes.get(0)).when(attributeRepository).findAttributeById(anyLong());
@@ -163,16 +175,7 @@ class PointServiceImplTest {
     }
 
     @Test
-    void shouldThrowEmptyListExceptionWhenAttributeListIsEmpty() {
-        doReturn(points.get(0)).when(pointRepository).findPointById(anyLong());
-        doReturn(Collections.emptyList()).when(attributeRepository).findByValues_Point(any(Point.class));
-        assertThrows(EmptyListException.class, () -> {
-            pointService.addAttributeToPoint(1L, 1L, "Some value");
-        });
-    }
-
-    @Test
-    void shouldThrowAttributePresentExceptionWhenPointContainsAttribute() {
+    void shouldThrowAttributePresentExceptionWhenPointContainsSuchAttribute() {
         doReturn(points.get(0)).when(pointRepository).findPointById(anyLong());
         doReturn(attributes).when(attributeRepository).findByValues_Point(any(Point.class));
         assertThrows(AttributePresentsException.class, () -> {
