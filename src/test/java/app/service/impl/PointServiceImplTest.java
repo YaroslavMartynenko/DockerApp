@@ -10,7 +10,7 @@ import app.exception.WrongIdException;
 import app.repository.AttributeRepository;
 import app.repository.PointRepository;
 import app.repository.ValueRepository;
-import org.junit.jupiter.api.BeforeAll;
+import app.util.InitTestData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,9 +42,9 @@ class PointServiceImplTest {
     @Autowired
     private PointServiceImpl pointService;
 
-    private static List<Point> points;
+    private List<Point> points = InitTestData.getPoints();
 
-    private static List<Attribute> attributes;
+    private List<Attribute> attributes = InitTestData.getAattributes();
 
     private static final Point POINT = Point
             .builder()
@@ -53,23 +53,6 @@ class PointServiceImplTest {
             .latitude(new BigDecimal(1.1))
             .name("Point 1")
             .build();
-
-    @BeforeAll
-    static void setUp() {
-        points = new ArrayList<>();
-        points.add(Point.builder().id(1L).longtitude(new BigDecimal(1.1))
-                .latitude(new BigDecimal(1.1)).name("Point 1").build());
-        points.add(Point.builder().id(2L).longtitude(new BigDecimal(2.2))
-                .latitude(new BigDecimal(2.2)).name("Point 2").build());
-        points.add(Point.builder().id(3L).longtitude(new BigDecimal(3.3))
-                .latitude(new BigDecimal(3.3)).name("Point 3").build());
-
-        attributes = new ArrayList<>();
-        attributes.add(Attribute.builder().id(1L).name("Attribute 1").build());
-        attributes.add(Attribute.builder().id(2L).name("Attribute 2").build());
-        attributes.add(Attribute.builder().id(3L).name("Attribute 3").build());
-    }
-
 
     @Test
     void shouldReturnPointById() {
