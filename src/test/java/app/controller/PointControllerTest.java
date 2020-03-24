@@ -217,7 +217,7 @@ class PointControllerTest {
     void shouldThrowWrongIdExceptionWhenPointWithSuchIdDoesNotExistInDb() throws Exception {
         mockMvc.perform(delete("/point/{id}", 1L))
                 .andDo(print())
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(content().contentType(new MediaType(MediaType.TEXT_PLAIN, Charset.forName("UTF-8"))))
                 .andExpect(content().string(containsString("Object with such id is not found!")));
     }

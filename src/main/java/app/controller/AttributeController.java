@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
 
 @Log4j2
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -33,7 +32,7 @@ public class AttributeController {
             return new ResponseEntity<>(attributes, HttpStatus.OK);
         } catch (EmptyListException e) {
             log.warn("Error while executing request", e.getCause());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -44,7 +43,7 @@ public class AttributeController {
             return new ResponseEntity<>(attribute, HttpStatus.OK);
         } catch (WrongIdException e) {
             log.warn("Error while executing request", e.getCause());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -53,8 +52,8 @@ public class AttributeController {
         try {
             List<Point> points = attributeService.getPointsWithAttribute(id);
             return new ResponseEntity<>(points, HttpStatus.OK);
-        } catch (EmptyListException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (WrongIdException | EmptyListException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -65,7 +64,7 @@ public class AttributeController {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (AttributeExistsException e) {
             log.warn("Error while executing request", e.getCause());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -76,7 +75,7 @@ public class AttributeController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (WrongIdException e) {
             log.warn("Error while executing request", e.getCause());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 }

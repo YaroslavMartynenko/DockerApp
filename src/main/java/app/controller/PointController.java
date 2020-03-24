@@ -97,7 +97,7 @@ public class PointController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (WrongIdException e) {
             log.warn("Error while executing request", e.getCause());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
