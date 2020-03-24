@@ -7,11 +7,9 @@ import app.exception.EmptyListException;
 import app.exception.PointExistsException;
 import app.exception.WrongIdException;
 import app.service.PointService;
-import app.service.impl.PointServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -83,9 +81,12 @@ public class PointController {
         try {
             pointService.addAttributeToPoint(attributeId, pointId, value);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (WrongIdException | AttributePresentsException e) {
+        } catch (WrongIdException e) {
             log.warn("Error while executing request", e.getCause());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (AttributePresentsException e) {
+            log.warn("Error while executing request", e.getCause());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
