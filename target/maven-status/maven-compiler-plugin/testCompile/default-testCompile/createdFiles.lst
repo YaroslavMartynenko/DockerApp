@@ -1,5 +1,0 @@
-app\util\InitTestData.class
-app\service\impl\AttributeServiceImplTest.class
-app\service\impl\PointServiceImplTest.class
-app\controller\AttributeControllerTest.class
-app\controller\PointControllerTest.class
