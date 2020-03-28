@@ -47,13 +47,13 @@ public class PointServiceImpl implements PointService {
     }
 
     @Override
-    public void addNewPoint(Point point) {
+    public Point addNewPoint(Point point) {
         Point pointFromDb = pointRepository
                 .findPointByLongtitudeAndLatitude(point.getLongtitude(), point.getLatitude());
         if (Objects.nonNull(pointFromDb)) {
             throw new PointExistsException();
         }
-        pointRepository.save(point);
+        return pointRepository.save(point);
     }
 
     @Override

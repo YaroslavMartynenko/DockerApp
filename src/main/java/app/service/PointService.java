@@ -10,7 +10,7 @@ public interface PointService {
 
     List<Point> getAllPoints();
 
-    void addNewPoint(Point point);
+    Point addNewPoint(Point point);
 
     void deletePointById(Long id);
 

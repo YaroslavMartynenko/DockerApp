@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,8 +50,8 @@ class PointServiceImplTest {
     private static final Point POINT = Point
             .builder()
             .id(1L)
-            .longtitude(new BigDecimal(1.1))
-            .latitude(new BigDecimal(1.1))
+            .longtitude(new BigDecimal(1.0).setScale(1, RoundingMode.DOWN))
+            .latitude(new BigDecimal(1.0).setScale(1, RoundingMode.DOWN))
             .name("Point 1")
             .build();
 
@@ -93,16 +94,28 @@ class PointServiceImplTest {
         });
     }
 
+//    @Test
+//    void shouldSaveNewPoint() {
+//        doReturn(null)
+//                .when(pointRepository)
+//                .findPointByLongtitudeAndLatitude(any(BigDecimal.class), any(BigDecimal.class));
+//        pointService.addNewPoint(POINT);
+//        verify(pointRepository, times(1))
+//                .findPointByLongtitudeAndLatitude(any(BigDecimal.class), any(BigDecimal.class));
+//        verify(pointRepository, times(1)).save(any(Point.class));
+//
+//    }
+
     @Test
     void shouldSaveNewPoint() {
-        doReturn(null)
-                .when(pointRepository)
-                .findPointByLongtitudeAndLatitude(any(BigDecimal.class), any(BigDecimal.class));
-        pointService.addNewPoint(POINT);
+        when(pointRepository.findPointByLongtitudeAndLatitude(any(BigDecimal.class), any(BigDecimal.class)))
+                .thenReturn(null);
+        when(pointRepository.save(any(Point.class))).thenReturn(POINT);
+        Point actual = pointService.addNewPoint(POINT);
         verify(pointRepository, times(1))
                 .findPointByLongtitudeAndLatitude(any(BigDecimal.class), any(BigDecimal.class));
         verify(pointRepository, times(1)).save(any(Point.class));
-
+        assertEquals(POINT, actual);
     }
 
     @Test

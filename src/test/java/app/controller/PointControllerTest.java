@@ -133,7 +133,12 @@ class PointControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsBytes(POINT)))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("Point 1")))
+                .andExpect(jsonPath("$.longtitude", is(1.0)))
+                .andExpect(jsonPath("$.latitude", is(1.0)));
     }
 
     @Test

@@ -65,8 +65,8 @@ public class PointController {
     @PostMapping()
     public ResponseEntity<Object> addNewPoint(@RequestBody @Valid Point point) {
         try {
-            pointService.addNewPoint(point);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            Point newPoint = pointService.addNewPoint(point);
+            return new ResponseEntity<>(newPoint, HttpStatus.CREATED);
         } catch (PointExistsException e) {
             log.warn("Error while executing request", e.getCause());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
