@@ -10,7 +10,7 @@ public interface AttributeService {
 
     List<Attribute> getAllAttributes();
 
-    void addNewAttribute(Attribute attribute);
+    Attribute addNewAttribute(Attribute attribute);
 
     void deleteAttributeById(Long id);
 

@@ -60,8 +60,8 @@ public class AttributeController {
     @PostMapping()
     public ResponseEntity<Object> addNewAttribute(@RequestBody @Valid Attribute attribute) {
         try {
-            attributeService.addNewAttribute(attribute);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            Attribute newAttribute = attributeService.addNewAttribute(attribute);
+            return new ResponseEntity<>(newAttribute, HttpStatus.CREATED);
         } catch (AttributeExistsException e) {
             log.warn("Error while executing request", e.getCause());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

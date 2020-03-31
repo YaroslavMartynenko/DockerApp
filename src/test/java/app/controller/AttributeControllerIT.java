@@ -28,14 +28,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ContextConfiguration
 @WebAppConfiguration
-class AttributeControllerTest {
+class AttributeControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
 
     private static final Attribute ATTRIBUTE = Attribute
             .builder()
-            .id(null)
+            .id(1L)
             .name("Attribute 1")
             .build();
 
@@ -55,6 +55,7 @@ class AttributeControllerTest {
     }
 
     @Test
+    @Sql(value = "/delete-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldTrowEmptyListExceptionWhenListOfAttributesIsEmpty() throws Exception {
         mockMvc.perform(get("/attribute"))
                 .andDo(print())
@@ -76,6 +77,7 @@ class AttributeControllerTest {
     }
 
     @Test
+    @Sql(value = "/delete-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldThrowWrongIdExceptionWhenAttributeWithSuchIdDoesNotExist() throws Exception {
         mockMvc.perform(get("/attribute/{id}", 1L))
                 .andDo(print())
@@ -101,6 +103,7 @@ class AttributeControllerTest {
     }
 
     @Test
+    @Sql(value = "/delete-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldThrowWrongIdExceptionIfAttributeWithSuchIdDoesNotExist() throws Exception {
         mockMvc.perform(get("/attribute/show_points_with_attribute/{id}", 1L))
                 .andDo(print())
@@ -121,12 +124,16 @@ class AttributeControllerTest {
     }
 
     @Test
+    @Sql(value = "/delete-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldSaveNewAttribute() throws Exception {
         mockMvc.perform(post("/attribute")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsBytes(ATTRIBUTE)))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("Attribute 1")));
     }
 
     @Test
@@ -152,6 +159,7 @@ class AttributeControllerTest {
     }
 
     @Test
+    @Sql(value = "/delete-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldThrowWrongIdExceptionWhenAttributeWithSuchIdDoesNotExistInDb() throws Exception {
         mockMvc.perform(delete("/attribute/{id}", 1L))
                 .andDo(print())

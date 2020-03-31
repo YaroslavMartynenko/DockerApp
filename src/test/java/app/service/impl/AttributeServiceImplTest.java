@@ -9,14 +9,13 @@ import app.repository.AttributeRepository;
 import app.repository.PointRepository;
 import app.util.InitTestData;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +24,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = AttributeServiceImpl.class)
 class AttributeServiceImplTest {
@@ -87,15 +85,17 @@ class AttributeServiceImplTest {
 
     @Test
     void shouldSaveNewAttribute() {
-        doReturn(null).when(attributeRepository).findAttributeByName(anyString());
-        attributeService.addNewAttribute(ATTRIBUTE);
+        when(attributeRepository.findAttributeByName(anyString())).thenReturn(null);
+        when(attributeRepository.save(any(Attribute.class))).thenReturn(ATTRIBUTE);
+        Attribute actual = attributeService.addNewAttribute(ATTRIBUTE);
         verify(attributeRepository, times(1)).findAttributeByName(anyString());
         verify(attributeRepository, times(1)).save(any(Attribute.class));
+        assertEquals(ATTRIBUTE, actual);
     }
 
     @Test
     void shouldThrowAttributeExistsExceptionWhenSuchAttributeAlreadyExists() {
-        doReturn(ATTRIBUTE).when(attributeRepository).findAttributeByName(anyString());
+        when(attributeRepository.findAttributeByName(anyString())).thenReturn(attributes.get(0));
         assertThrows(AttributeExistsException.class, () -> {
             attributeService.addNewAttribute(ATTRIBUTE);
         });
@@ -123,12 +123,24 @@ class AttributeServiceImplTest {
         when(pointRepository.findByValues_Attribute(any(Attribute.class))).thenReturn(points);
         List<Point> actual = attributeService.getPointsWithAttribute(1L);
         List<Point> expected = new ArrayList<>();
-        expected.add(Point.builder().id(1L).longtitude(new BigDecimal(1.1))
-                .latitude(new BigDecimal(1.1)).name("Point 1").build());
-        expected.add(Point.builder().id(2L).longtitude(new BigDecimal(2.2))
-                .latitude(new BigDecimal(2.2)).name("Point 2").build());
-        expected.add(Point.builder().id(3L).longtitude(new BigDecimal(3.3))
-                .latitude(new BigDecimal(3.3)).name("Point 3").build());
+        expected.add(Point.builder()
+                .id(1L)
+                .longtitude(new BigDecimal(1.0).setScale(1, RoundingMode.DOWN))
+                .latitude(new BigDecimal(1.0).setScale(1, RoundingMode.DOWN))
+                .name("Point 1")
+                .build());
+        expected.add(Point.builder()
+                .id(2L)
+                .longtitude(new BigDecimal(2.0).setScale(1, RoundingMode.DOWN))
+                .latitude(new BigDecimal(2.0).setScale(1, RoundingMode.DOWN))
+                .name("Point 2")
+                .build());
+        expected.add(Point.builder()
+                .id(3L)
+                .longtitude(new BigDecimal(3.0).setScale(1, RoundingMode.DOWN))
+                .latitude(new BigDecimal(3.0).setScale(1, RoundingMode.DOWN))
+                .name("Point 3")
+                .build());
         verify(attributeRepository, times(1)).findAttributeById(anyLong());
         verify(pointRepository, times(1)).findByValues_Attribute(any(Attribute.class));
         assertEquals(expected, actual);

@@ -76,12 +76,23 @@ class PointServiceImplTest {
         when(pointRepository.findAll()).thenReturn(points);
         List<Point> actual = pointService.getAllPoints();
         List<Point> expected = new ArrayList<>();
-        expected.add(Point.builder().id(1L).longtitude(new BigDecimal(1.1))
-                .latitude(new BigDecimal(1.1)).name("Point 1").build());
-        expected.add(Point.builder().id(2L).longtitude(new BigDecimal(2.2))
-                .latitude(new BigDecimal(2.2)).name("Point 2").build());
-        expected.add(Point.builder().id(3L).longtitude(new BigDecimal(3.3))
-                .latitude(new BigDecimal(3.3)).name("Point 3").build());
+        expected.add(Point.builder()
+                .id(1L)
+                .longtitude(new BigDecimal(1.0).setScale(1, RoundingMode.DOWN))
+                .latitude(new BigDecimal(1.0).setScale(1, RoundingMode.DOWN))
+                .name("Point 1")
+                .build());
+        expected.add(Point.builder()
+                .id(2L).longtitude(new BigDecimal(2.0).setScale(1, RoundingMode.DOWN))
+                .latitude(new BigDecimal(2.0).setScale(1, RoundingMode.DOWN))
+                .name("Point 2")
+                .build());
+        expected.add(Point.builder()
+                .id(3L)
+                .longtitude(new BigDecimal(3.0).setScale(1, RoundingMode.DOWN))
+                .latitude(new BigDecimal(3.0).setScale(1, RoundingMode.DOWN))
+                .name("Point 3")
+                .build());
         verify(pointRepository, times(1)).findAll();
         assertEquals(expected, actual);
     }
@@ -93,18 +104,6 @@ class PointServiceImplTest {
             pointService.getAllPoints();
         });
     }
-
-//    @Test
-//    void shouldSaveNewPoint() {
-//        doReturn(null)
-//                .when(pointRepository)
-//                .findPointByLongtitudeAndLatitude(any(BigDecimal.class), any(BigDecimal.class));
-//        pointService.addNewPoint(POINT);
-//        verify(pointRepository, times(1))
-//                .findPointByLongtitudeAndLatitude(any(BigDecimal.class), any(BigDecimal.class));
-//        verify(pointRepository, times(1)).save(any(Point.class));
-//
-//    }
 
     @Test
     void shouldSaveNewPoint() {
@@ -119,10 +118,9 @@ class PointServiceImplTest {
     }
 
     @Test
-    void shouldThrowPointExistsExceptionWhenSuchPointAlreadyExists() {
-        doReturn(points.get(0))
-                .when(pointRepository)
-                .findPointByLongtitudeAndLatitude(any(BigDecimal.class), any(BigDecimal.class));
+    void shouldThrowPointExistsExceptionWhenPointWithSuchCoordinatesAlreadyExists() {
+        when(pointRepository.findPointByLongtitudeAndLatitude(any(BigDecimal.class), any(BigDecimal.class)))
+                .thenReturn(points.get(0));
         assertThrows(PointExistsException.class, () -> {
             pointService.addNewPoint(POINT);
         });

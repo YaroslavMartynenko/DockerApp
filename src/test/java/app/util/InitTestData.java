@@ -4,6 +4,7 @@ import app.domain.Attribute;
 import app.domain.Point;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +12,24 @@ public final class InitTestData {
 
     public static List<Point> getPoints() {
         List<Point> points = new ArrayList<>();
-        points.add(Point.builder().id(1L).longtitude(new BigDecimal(1.1))
-                .latitude(new BigDecimal(1.1)).name("Point 1").build());
-        points.add(Point.builder().id(2L).longtitude(new BigDecimal(2.2))
-                .latitude(new BigDecimal(2.2)).name("Point 2").build());
-        points.add(Point.builder().id(3L).longtitude(new BigDecimal(3.3))
-                .latitude(new BigDecimal(3.3)).name("Point 3").build());
+        points.add(Point.builder()
+                .id(1L)
+                .longtitude(new BigDecimal(1.0).setScale(1, RoundingMode.DOWN))
+                .latitude(new BigDecimal(1.0).setScale(1, RoundingMode.DOWN))
+                .name("Point 1")
+                .build());
+        points.add(Point.builder()
+                .id(2L)
+                .longtitude(new BigDecimal(2.0).setScale(1, RoundingMode.DOWN))
+                .latitude(new BigDecimal(2.0).setScale(1, RoundingMode.DOWN))
+                .name("Point 2")
+                .build());
+        points.add(Point.builder()
+                .id(3L)
+                .longtitude(new BigDecimal(3.0).setScale(1, RoundingMode.DOWN))
+                .latitude(new BigDecimal(3.0).setScale(1, RoundingMode.DOWN))
+                .name("Point 3")
+                .build());
         return points;
     }
 

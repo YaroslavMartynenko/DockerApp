@@ -27,14 +27,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ContextConfiguration
 @WebAppConfiguration
-class PointControllerTest {
+class PointControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
 
     private static final Point POINT = Point
             .builder()
-            .id(null)
+            .id(1L)
             .longtitude(new BigDecimal(1.0).setScale(1, RoundingMode.DOWN))
             .latitude(new BigDecimal(1.0).setScale(1, RoundingMode.DOWN))
             .name("Point 1")
@@ -60,6 +60,7 @@ class PointControllerTest {
     }
 
     @Test
+    @Sql(value = "/delete-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldTrowEmptyListExceptionWhenListOfPointsIsEmpty() throws Exception {
         mockMvc.perform(get("/point"))
                 .andDo(print())
@@ -83,6 +84,7 @@ class PointControllerTest {
     }
 
     @Test
+    @Sql(value = "/delete-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldThrowWrongIdExceptionWhenPointWithSuchIdDoesNotExist() throws Exception {
         mockMvc.perform(get("/point/{id}", 1L))
                 .andDo(print())
@@ -108,6 +110,7 @@ class PointControllerTest {
     }
 
     @Test
+    @Sql(value = "/delete-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldThrowWrongIdExceptionIfPointWithSuchIdDoesNotExist() throws Exception {
         mockMvc.perform(get("/point/show_point_attributes/{id}", 1L))
                 .andDo(print())
@@ -128,6 +131,7 @@ class PointControllerTest {
     }
 
     @Test
+    @Sql(value = "/delete-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldSaveNewPoint() throws Exception {
         mockMvc.perform(post("/point")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -168,6 +172,7 @@ class PointControllerTest {
     }
 
     @Test
+    @Sql(value = "/delete-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldThrowWrongIdExceptionIfPointWithSuchIdDoesNotExistInDb() throws Exception {
         mockMvc.perform(post("/point/add_attribute_to_point")
                 .param("attributeId", "1")
@@ -219,6 +224,7 @@ class PointControllerTest {
     }
 
     @Test
+    @Sql(value = "/delete-test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldThrowWrongIdExceptionWhenPointWithSuchIdDoesNotExistInDb() throws Exception {
         mockMvc.perform(delete("/point/{id}", 1L))
                 .andDo(print())

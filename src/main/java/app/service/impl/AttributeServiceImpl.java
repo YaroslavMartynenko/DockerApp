@@ -43,12 +43,12 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
-    public void addNewAttribute(Attribute attribute) {
+    public Attribute addNewAttribute(Attribute attribute) {
         Attribute attributeFromDb = attributeRepository.findAttributeByName(attribute.getName());
         if (Objects.nonNull(attributeFromDb)) {
             throw new AttributeExistsException();
         }
-        attributeRepository.save(attribute);
+        return attributeRepository.save(attribute);
     }
 
     @Override

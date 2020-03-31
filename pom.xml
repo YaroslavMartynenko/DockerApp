@@ -9,10 +9,13 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <!--        <flyway.url>jdbc:postgresql://localhost:5432/postgres</flyway.url>-->
-        <!--        <flyway.user>postgres</flyway.user>-->
-        <!--        <flyway.password>root</flyway.password>-->
+        <flyway.url>jdbc:postgresql://192.168.99.100:5432/postgres</flyway.url>
+        <flyway.user>postgres</flyway.user>
+        <flyway.password>root</flyway.password>
         <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.release>11</maven.compiler.release>
     </properties>
 
     <parent>
@@ -90,6 +93,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>0.33.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -113,57 +122,55 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>pre-integration-test</id>-->
-                        <!--<goals>-->
-                            <!--<goal>start</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                    <!--<execution>-->
-                        <!--<id>post-integration-test</id>-->
-                        <!--<goals>-->
-                            <!--<goal>stop</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>unit-tests</id>-->
-                        <!--<phase>test</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>test</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.1</version>
-                <!--<configuration>-->
-                    <!--<includes>-->
-                        <!--<include>**/*Test.java</include>-->
-                    <!--</includes>-->
-                <!--</configuration>-->
-                <!--<executions>-->
-                <!--<execution>-->
-                <!--<goals>-->
-                <!--<goal>test</goal>-->
-                <!--&lt;!&ndash;<goal>verify</goal>&ndash;&gt;-->
-                <!--</goals>-->
-                <!--</execution>-->
-                <!--</executions>-->
             </plugin>
 
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-failsafe-plugin</artifactId>-->
-            <!--<version>2.22.2</version>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
 
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.33.0</version>
+                <executions>
+                    <execution>
+                        <id>start-database-container</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <images>
+                        <image>
+                            <name>postgres:12.2</name>
+                            <alias>database</alias>
+                            <run>
+                                <containerNamePattern>%a</containerNamePattern>
+                                <ports>
+                                    <port>5432:5432</port>
+                                </ports>
+                                <env>
+                                    <POSTGRES_DB>postgres</POSTGRES_DB>
+                                    <POSTGRES_USER>postgres</POSTGRES_USER>
+                                    <POSTGRES_PASSWORD>root</POSTGRES_PASSWORD>
+                                </env>
+                                <!--<autoRemove>true</autoRemove>-->
+                            </run>
+                        </image>
+                    </images>
+                    <!--<keepRunning>true</keepRunning>-->
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
 </project>
