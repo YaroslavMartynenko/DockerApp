@@ -164,7 +164,7 @@
                                     <POSTGRES_USER>postgres</POSTGRES_USER>
                                     <POSTGRES_PASSWORD>root</POSTGRES_PASSWORD>
                                 </env>
-                                <!--<autoRemove>true</autoRemove>-->
+                                <autoRemove>true</autoRemove>
                             </run>
                         </image>
                     </images>

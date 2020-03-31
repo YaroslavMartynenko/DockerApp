@@ -2,6 +2,7 @@ package app.controller;
 
 import app.domain.Attribute;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,5 +167,10 @@ class AttributeControllerIT {
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(new MediaType(MediaType.TEXT_PLAIN, Charset.forName("UTF-8"))))
                 .andExpect(content().string(containsString("Object with such id is not found!")));
+    }
+
+    @AfterAll
+    @Sql(value = "/delete-test-data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    static void clearDatabase() {
     }
 }

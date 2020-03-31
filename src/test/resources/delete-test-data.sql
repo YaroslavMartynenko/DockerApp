@@ -4,3 +4,12 @@ DELETE
 FROM point;
 DELETE
 FROM attribute;
+
+ALTER SEQUENCE hibernate_sequence
+RESTART;
+ALTER SEQUENCE point_id_seq
+RESTART;
+ALTER SEQUENCE attribute_id_seq
+RESTART;
+ALTER SEQUENCE value_id_seq
+RESTART;
