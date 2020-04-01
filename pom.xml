@@ -148,6 +148,13 @@
                             <goal>start</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>stop-database-container</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
                 </executions>
                 <configuration>
                     <images>
@@ -168,7 +175,6 @@
                             </run>
                         </image>
                     </images>
-                    <!--<keepRunning>true</keepRunning>-->
                 </configuration>
             </plugin>
         </plugins>
