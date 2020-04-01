@@ -60,6 +60,6 @@ CREATE TABLE value
 ALTER TABLE IF EXISTS value
   ADD CONSTRAINT valueToPoint FOREIGN KEY (point_id) REFERENCES point (id);
 ALTER TABLE IF EXISTS value
-  ADD CONSTRAINT valueToAttribute FOREIGN KEY (point_id) REFERENCES attribute (id);
+  ADD CONSTRAINT valueToAttribute FOREIGN KEY (attribute_id) REFERENCES attribute (id);
 ALTER TABLE IF EXISTS value
   ADD CONSTRAINT pointAndAttributeUniqueConstraint UNIQUE (point_id, attribute_id);
