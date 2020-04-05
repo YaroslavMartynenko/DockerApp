@@ -147,6 +147,25 @@
                         <goals>
                             <goal>start</goal>
                         </goals>
+                        <configuration>
+                            <images>
+                                <image>
+                                    <name>postgres:12.2</name>
+                                    <alias>database</alias>
+                                    <run>
+                                        <containerNamePattern>%a</containerNamePattern>
+                                        <ports>
+                                            <port>5432:5432</port>
+                                        </ports>
+                                        <env>
+                                            <POSTGRES_DB>postgres</POSTGRES_DB>
+                                            <POSTGRES_USER>postgres</POSTGRES_USER>
+                                            <POSTGRES_PASSWORD>root</POSTGRES_PASSWORD>
+                                        </env>
+                                    </run>
+                                </image>
+                            </images>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>stop-database-container</id>
@@ -154,29 +173,13 @@
                         <goals>
                             <goal>stop</goal>
                         </goals>
+                        <configuration>
+                            <keepContainer>true</keepContainer>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <images>
-                        <image>
-                            <name>postgres:12.2</name>
-                            <alias>database</alias>
-                            <run>
-                                <containerNamePattern>%a</containerNamePattern>
-                                <ports>
-                                    <port>5432:5432</port>
-                                </ports>
-                                <env>
-                                    <POSTGRES_DB>postgres</POSTGRES_DB>
-                                    <POSTGRES_USER>postgres</POSTGRES_USER>
-                                    <POSTGRES_PASSWORD>root</POSTGRES_PASSWORD>
-                                </env>
-                                <!--<autoRemove>true</autoRemove>-->
-                            </run>
-                        </image>
-                    </images>
-                </configuration>
             </plugin>
+
         </plugins>
     </build>
 </project>

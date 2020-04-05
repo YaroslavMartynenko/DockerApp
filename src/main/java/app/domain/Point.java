@@ -19,7 +19,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "point")
-//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Point {
 

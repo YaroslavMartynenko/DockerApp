@@ -88,6 +88,7 @@ public class PointServiceImpl implements PointService {
     public List<Attribute> getPointAttributes(Long id) {
         Point point = getPointById(id);
         List<Attribute> attributes = attributeRepository.findByValues_Point(point);
+        //add private method (point id, attribute id) {return value of attribute for this point}
         if (attributes.isEmpty()) {
             throw new EmptyListException();
         }
